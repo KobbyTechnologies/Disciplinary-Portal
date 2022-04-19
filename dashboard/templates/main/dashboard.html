@@ -1,0 +1,34 @@
+{% extends 'offcanvas.html' %}
+{% load bootstrap5 %}
+{% load static %}
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.js"></script>
+<section>
+    <div class="content-wrapper general-bg" style="padding-bottom: 1rem ">
+        <div class="row" id="proBanner">
+            <div class="col-12">
+                <span class="d-flex align-items-center purchase-popup">
+                    <img src="../../../static/img/logo/fav.png" width="70px" class="img-fluid" alt="" srcset="">
+                    <a href="" class="btn purchase-button">Button <i class="las la-user-circle fill-white"
+                            style="font-size:1rem;color: white;"></i></a>
+                </span>
+            </div>
+        </div>
+        <div class="d-xl-flex justify-content-between align-items-start">
+            <h2 class="text-dark font-weight-bold mb-2"> Overview dashboard </h2>
+            <div class="d-sm-flex justify-content-xl-between align-items-center mb-2">
+                <div class="dropdown ml-0 ml-md-4 mt-2 mt-lg-0">
+                    <button class="btn bg-white dropdown-toggle p-3 d-flex align-items-center" type="button"
+                        id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
+                            class="mdi mdi-calendar mr-1"></i>{{today}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+
+{% endblock %}
