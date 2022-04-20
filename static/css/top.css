@@ -1,7 +1,7 @@
 :root {
     --first-color: #144a85;
     --first-color-light: #6c8aaf;
-    --green-color: #25CC88;
+    --green-color: #134326;
     --red-color: #e51e25;
     --sand-tan: #e1b382;
     --dark-color: #444a4a;
@@ -370,4 +370,23 @@ ul.breadcrumb li a:hover {
 
 .j-o-text small {
     color: #222;
+}
+.actionBtn{
+    border-radius: 20px !important;
+}
+.btnHome{
+    background: var(--first-color);
+    border-color: var(--first-color);
+}
+.btnHome:hover{
+    background: var(--first-color);
+    border-color: var(--first-color);
+}
+.btnTrue{
+    background: var(--green-color);
+    border-color: var(--green-color);
+}
+.btnTrue:hover{
+    background: var(--green-color);
+    border-color: var(--green-color);
 }

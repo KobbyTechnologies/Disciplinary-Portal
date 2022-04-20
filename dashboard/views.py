@@ -9,17 +9,6 @@ from datetime import date
 # Create your views here.
 
 
-# def canvas(request):
-#     if request.method == 'POST':
-#         images = request.FILES.getlist('images')
-#         for image in images:
-#             photo = Photo.objects.create(
-#                 image=image,
-#             )
-#         return redirect('main')
-#     return render(request, 'offcanvas.html')
-
-
 def dashboard(request):
     session = requests.Session()
     session.auth = config.AUTHS
@@ -52,3 +41,7 @@ def dashboard(request):
            "count": count, "counter": counter,
            "job": Job, "my_name": my_name}
     return render(request, 'main/dashboard.html', ctx)
+
+
+def caseDetails(request):
+    return render(request, 'open.html')

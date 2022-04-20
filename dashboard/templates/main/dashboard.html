@@ -10,13 +10,11 @@
             <div class="col-12">
                 <span class="d-flex align-items-center purchase-popup">
                     <img src="../../../static/img/logo/fav.png" width="70px" class="img-fluid" alt="" srcset="">
-                    <a href="" class="btn purchase-button">Button <i class="las la-user-circle fill-white"
-                            style="font-size:1rem;color: white;"></i></a>
                 </span>
             </div>
         </div>
         <div class="d-xl-flex justify-content-between align-items-start">
-            <h2 class="text-dark font-weight-bold mb-2"> Overview dashboard </h2>
+            <h2 class="text-dark font-weight-bold mb-2"> Specialist dashboard </h2>
             <div class="d-sm-flex justify-content-xl-between align-items-center mb-2">
                 <div class="dropdown ml-0 ml-md-4 mt-2 mt-lg-0">
                     <button class="btn bg-white dropdown-toggle p-3 d-flex align-items-center" type="button"
@@ -26,9 +24,162 @@
                 </div>
             </div>
         </div>
+        <div class="row my-2">
+            <div class="col-md-12">
+                <div class="card" id="d-card">
+                    <div class="m-4">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="nav-item">
+                                <a href="#home" class="nav-link active" data-bs-toggle="tab">Open Cases
+                                    ({{count}})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#profile" class="nav-link" data-bs-toggle="tab">Case Pending Acceptance
+                                    ({{counter}})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#reject" class="nav-link" data-bs-toggle="tab">Closed Cases
+                                    ({{counter}})</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="home">
+                                <h4 class="mt-2 text-dark">Open Cases</h4>
+                                <div class="card-body">
+                                    <table id="example"
+                                        class="display table table-striped table-bordered dt-responsive table-responsive-lg"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr id="tops">
+                                                <th id="long">Case ID</th>
+                                                <th>Description</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>C0001</td>
+                                                <td id="rap">Please note the difference between the outcome of both the
+                                                    properties. </td>
+                                                <td>
+                                                    <a href="{% url 'caseDetails' %}"
+                                                        class="btn btn-success actionBtn btnTrue" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View">View <i
+                                                            class="fa fa-table"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile">
+                                <h4 class="mt-2">Cases Pending Acceptance </h4>
+                                <div class="card-body">
+                                    <table id="example"
+                                        class="display table table-striped table-bordered dt-responsive table-responsive-lg"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr id="tops">
+                                                <th id="long">Case ID</th>
+                                                <th>Description</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>C0001</td>
+                                                <td id="rap">Please note the difference between the outcome of both the
+                                                    properties. </td>
+                                                <td>
+                                                    <a href="" class="btn btn-success btnTrue actionBtn" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="Accept">
+                                                        Accept
+                                                        <i class="fa fa-table"></i>
+                                                    </a>
+                                                    <a href="" class="btn btn-danger actionBtn" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="Reject"
+                                                        data-bs-toggle="modal" data-bs-target="#editLeave">
+                                                        Reject
+                                                        <i class="fa fa-table"></i>
+                                                    </a>
+                                                    <a href="" class="btn btn-success actionBtn btnHome" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View"> View <i
+                                                            class="fa fa-table"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="reject">
+                                <h4 class="mt-2">Closed Cases</h4>
+                                <div class="card-body">
+                                    <table id="example"
+                                        class="display table table-striped table-bordered dt-responsive table-responsive-lg"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr id="tops">
+                                                <th id="long">Case ID</th>
+                                                <th>Description</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>C0001</td>
+                                                <td id="rap">Please note the difference between the outcome of both the
+                                                    properties. </td>
+                                                <td>
+                                                    <a href="" class="btn btn-success btn-icon-text" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View"><i
+                                                            class="fa fa-table"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     </div>
 </section>
+<div class="modal fade" id="editLeave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    Reject Case Acceptance
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label">Comment</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
 
 
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}
