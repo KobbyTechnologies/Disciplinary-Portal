@@ -35,13 +35,17 @@ def dashboard(request):
     except requests.exceptions.ConnectionError as e:
         print(e)
     my_name = request.session['E_Mail']
-
+    types = request.session['types']
     todays_date = datetime.datetime.now().strftime("%b. %d, %Y %A")
     ctx = {"today": todays_date, "year": year,
            "count": count, "counter": counter,
-           "job": Job, "my_name": my_name}
+           "job": Job, "my_name": my_name, "types": types}
     return render(request, 'main/dashboard.html', ctx)
 
 
 def caseDetails(request):
-    return render(request, 'open.html')
+    todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
+    todays_date = date.today()
+    year = todays_date.year
+    ctx = {"today": todays_dates, "year": year}
+    return render(request, 'open.html', ctx)

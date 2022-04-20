@@ -85,22 +85,22 @@ ul.breadcrumb li a:hover {
 }
 
 .l-bg-cherry {
-    background: #e51e25 !important;
+    background: linear-gradient(to right, #444a4a, #e51e25) !important;;
     color: #fff;
 }
 
 .l-bg-blue-dark {
-    background: #124887 !important;
+    background: linear-gradient(to right, #373b44, #144a85) !important;
     color: #fff;
 }
 
 .l-bg-green-dark {
-    background: #134326 !important;
+    background:linear-gradient(to right, #0a504a, #134326) !important;
     color: #fff;
 }
 
 .l-bg-orange-dark {
-    background: black !important;
+    background: linear-gradient(to right, #a86008, #c18b39) !important;
     color: #fff;
 }
 
@@ -390,3 +390,100 @@ ul.breadcrumb li a:hover {
     background: var(--green-color);
     border-color: var(--green-color);
 }
+.attachs{
+    margin-top: 2rem !important;
+    background: #f8f8f8;
+    padding: 1rem;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px !important;
+}
+.attachs:hover{
+    -webkit-transform: translateY(-20px);
+    -ms-transform: translateY(-20px);
+    transform: translateY(-20px);
+    box-shadow: 0 22px 43px rgba(0, 0, 0, 0.32);
+    cursor: pointer;
+}
+.attachs span{
+    color: var(--first-color) !important;
+}
+.social-link {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--first-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--red-color);
+    border-radius: 50%;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.social-link:hover, .social-link:focus {
+    background: var(--first-color);
+    text-decoration: none;
+    color: var(--red-color);
+}
+#msgWindow {
+    margin-top: 20px;
+  }
+  
+  #msgs {
+    margin: 0px 25px;
+    min-height: 200px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+  
+  .msg {
+    margin: 5px 0;
+    border: 1px solid silver;
+    padding: 3px 7px;
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+  }
+  .msg::before, .msg::after {
+    content: "";
+    display: inline-block;
+    bottom: 0;
+    position: absolute;
+    border: 1px solid silver;
+  }
+  .msg::before {
+    right: -20px;
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+  }
+  .msg::after {
+    right: -35px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+  }
+  .msg.from {
+    align-self: flex-end;
+  }
+  .msg.to {
+    align-self: flex-start;
+  }
+  .msg.to::before {
+    right: inherit;
+    left: -20px;
+  }
+  .msg.to::after {
+    right: inherit;
+    left: -35px;
+  }
+  .msg.typing {
+    color: silver;
+  }
+  
+  #msgForm input:focus, #msgForm button:focus {
+    box-shadow: none;
+  }
