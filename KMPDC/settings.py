@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     'dashboard',
     'bootstrap5',
     'accounts',
+    'ckeditor',
+
 ]
 
 MIDDLEWARE = [
@@ -179,7 +181,7 @@ django_heroku.settings(locals())
 AUTHS = Session()
 
 WEB_SERVICE_PWD = 'Password@123'
-BASE_URL = 'http://20.121.189.145:7047/KMPDC/WS/KMPDC/Codeunit/CuRecruitmentWebPortal'
+BASE_URL = 'http://20.121.189.145:7047/KMPDC/WS/KMPDC/Codeunit/CuEthicsDisciplinary'
 O_DATA = "http://20.121.189.145:7048/KMPDC/ODataV4/Company(%27KMPDC%27){}"
 AUTHS.auth = HTTPBasicAuth('WINNIE', WEB_SERVICE_PWD)
 

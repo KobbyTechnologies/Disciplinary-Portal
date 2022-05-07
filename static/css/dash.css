@@ -195,3 +195,157 @@
 #p-card:hover {
     background: var(--white-color);
 }
+.sendBtn {
+    background: var(--green-color) !important;
+    border: 0px solid var(--green-color);
+    border-radius: 35px !important;
+    font-size: 0.7rem !important;
+    font-weight: bold !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.25s ease !important;
+    width: 210px;
+    position: relative;
+    height: 50px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: 0;
+}
+.sendBtn:not(.loading):hover {
+    box-shadow: 0px 10px 25px 0px rgba(73, 215, 92, 0.4) !important;
+  }
+  .sendBtn:not(.loading):hover i {
+    transform: translate(7px) !important ;
+  }
+  .sendBtn i {
+    font-size: 1.45rem !important;
+    position: absolute !important;
+    left: 0px !important;
+    pointer-events: none;
+    z-index: 10 !important;
+    background: inherit;
+    width: 50px !important;
+    height: 50px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important;
+    transition: all 0.25s ease !important;
+  }
+  .sendBtn .text {
+    width: 100px !important;
+    display: block !important;
+    position: relative !important;
+    pointer-events: none;
+    transition: all 0.25s ease !important;
+    position: absolute;
+    left: 20px !important;
+  }
+  .loading-animate {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 100;
+    border-radius: 50%;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.25s ease;
+  }
+  .loading-animate:after {
+    content: "";
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-left: 3px solid #fff !important;
+    animation: loading infinite 0.8s ease 0.05s;
+    position: absolute;
+  }
+  .loading-animate:before {
+    content: "";
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-left: 3px solid #fff !important;
+    animation: loading infinite 0.8s linear;
+    position: absolute;
+    opacity: 0.6;
+  }
+  .sendBtn.loading {
+    width: 50px;
+  }
+  .sendBtn.loading i {
+    transform: rotate(-90deg) !important;
+    padding-bottom: 4px;
+    padding-left: 3px;
+  }
+  .sendBtn.loading .text {
+    transform: translate(-140px);
+  }
+  .sendBtn.loading .loading-animate {
+    opacity: 1;
+  }
+  @keyframes loading {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .page-header {
+	background: #006A4E;
+	margin: 0;
+  padding: 20px 0 10px;
+	color: #FFFFFF;
+	position: fixed;
+	width: 100%;
+  z-index: 1
+}
+
+.chat-log {
+	padding: 40px 0 114px;
+	height: auto;
+	overflow: auto;
+}
+.chat-log__item {
+	background: #fafafa;
+	padding: 10px;
+	margin: 0 auto 20px;
+	max-width: 80%;
+	float: left;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0,0,0,.1);
+	clear: both;
+}
+
+.chat-log__item.chat-log__item--own {
+	float: right;
+	background: #DCF8C6;
+	text-align: right;
+}
+
+.chat-form {
+	background: #DDDDDD;
+	padding: 40px 0;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+.chat-log__author {
+	margin: 0 auto .5em;
+	font-size: 14px;
+	font-weight: bold;
+}
+  

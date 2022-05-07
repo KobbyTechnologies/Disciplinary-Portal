@@ -22,7 +22,17 @@ body {
     scroll-behavior: smooth;
     height: auto;
 }
-
+.br-primary{
+    background: var(--first-color);
+}
+.br-success{
+background: var(--green-color);
+border-color: var(--green-color);
+}
+.br-success:hover{
+    background: #297748;
+    border-color: var(--green-color);
+    }
 /* Alerts */
 .alert-warn {
     background: var(--red-color);
@@ -81,21 +91,6 @@ input.invalid {
 /* Hide all steps by default: */
 .tab {
     display: none;
-}
-
-button {
-    background-color: var(--first-color);
-    color: #ffffff;
-    font-family: var(--normal-font);
-    border: 1px solid var(--first-color);
-    padding: 10px 20px;
-    font-size: 17px;
-    border-radius: 40px;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.8;
 }
 
 #prevBtn {
@@ -282,15 +277,16 @@ button:hover {
     border-radius: 5px;
 }
 
-button.btn.btn-link.collapsed i {
-    transform: rotate(0deg);
-}
-
-button.btn.btn-link i {
-    transform: rotate(180deg);
-    transition: 0.5s;
-}
-
 .steps {
     margin-top: 2.5rem;
+}
+.dz {
+    border: dashed var(--first-color-light) !important;
+    background-color: #ccc !important;
+    border-radius: 10px !important;
+    color: #000 !important;
+}
+
+.dz:hover {
+    background-color: aliceblue !important;
 }

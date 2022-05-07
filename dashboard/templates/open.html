@@ -3,31 +3,31 @@
 {% load static %}
 {% block main %}
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
 <section class="dash2">
     <div class="content-wrapper">
         <div class="d-xl-flex justify-content-between align-items-start">
-            <h2 class="text-dark font-weight-bold mb-2"> Case C0001 Details
+            <h2 class="text-dark font-weight-bold mb-2"> Case {{res.Interact_Code}}
                 {% if state == 1 %}
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <i
-                        class="las la-plus"></i> Imprest
-                    Lines</button>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Attachment"> <i
-                        class="las la-plus"></i> Upload Attachment</button>
-                {% elif state == 3 %}
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#report"> Generate
-                    Report</button>
-                {% else %}
-                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#Attachment"> Upload
-                    Attachment</button>
+                {% for res in file %}
+                <button class="btn br-success btn-success"> {{res.File_Name}}.{{res.File_Extension}} <i
+                        class="fas fa-download"></i>
+                </button>
+                {% empty %}
+                <button class="btn btn-danger"> No Attachments <i class="las la-file-download"></i>
+                </button>
+                {% endfor %}
                 {% endif %}
             </h2>
 
             <div class="d-sm-flex justify-content-xl-between align-items-center mb-2">
-                <div class="dropdown ml-0 ml-md-4 mt-2 mt-lg-0">
-                    <button class="btn bg-white dropdown-toggle p-3 d-flex align-items-center" type="button"
-                        id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
-                            class="mdi mdi-calendar mr-1"></i>{{today}}
+                <div class=" ml-0 ml-md-4 mt-2 mt-lg-0">
+                    <button class="btn btn-success align-items-center p-3" type="button"
+                        style="background: #144a85;border:none">
+                        <i class="mdi mdi-calendar mr-1"></i>{{today}}
                     </button>
                 </div>
             </div>
@@ -54,18 +54,75 @@
         {% endif %}
         {% endfor %}
         {% endif %}
+        {% if state == 1%}
         <div class="row my-3">
-            <div class="col-md-3">
+            <div class="col-md-5">
+                <div class="card l-bg-orange-dark  statCard h-100">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-briefcase"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0">Complaint Type</h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-md-12">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{res.Complaint_Type}}
+                                </h2>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
                 <div class="card l-bg-cherry statCard h-100">
                     <div class="card-statistic-3 p-4">
-                        <div class="card-icon card-icon-large"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="card-icon card-icon-large"><i class="fas fa-folder-open"></i></div>
                         <div class="mb-4">
-                            <h5 class="card-title mb-0">Case Information</h5>
+                            <h5 class="card-title mb-0">Speciality Description</h5>
                         </div>
                         <div class="row align-items-center mb-2 d-flex">
                             <div class="col-md-12">
                                 <h2 class="d-flex align-items-center mb-0">
-                                    {{res.Account_Type}}
+                                    {{res.Speciality_Description}}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row my-3">
+            <div class="col-md-4">
+                <div class="card l-bg-orange-dark  statCard h-100">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-briefcase"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0">Complaint Type</h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-md-12">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{res.Complaint_Type}}
+                                </h2>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card l-bg-cherry statCard h-100">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-folder-open"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0">Speciality Description</h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-md-12">
+                                <h2 class="d-flex align-items-center mb-0">
+                                    {{res.Speciality_Description}}
                                 </h2>
                             </div>
                         </div>
@@ -73,86 +130,16 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card l-bg-blue-dark statCard h-100">
+                <div class="card l-bg-green-dark  statCard h-100">
                     <div class="card-statistic-3 p-4">
-                        <div class="card-icon card-icon-large"><i class="fas fa-users"></i></div>
+                        <div class="card-icon card-icon-large"><i class="fas fa-briefcase"></i></div>
                         <div class="mb-4">
-                            <h5 class="card-title mb-0">Case Information</h5>
+                            <h5 class="card-title mb-0">Case Status</h5>
                         </div>
-                        {% if res.Status == "Open" %}
                         <div class="row align-items-center mb-2 d-flex">
                             <div class="col-md-12">
                                 <h2 class="d-flex align-items-center mb-0">
                                     {{res.Status}}
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                            <div class="progress-bar l-bg-red" role="progressbar" data-width="50%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"
-                                style="width: 50%; background: linear-gradient(to right, #a86008, #c18b39) !important;">
-                            </div>
-                        </div>
-                        {% elif res.Status == "Pending Approval" %}
-                        <div class="row align-items-center mb-2 d-flex">
-                            <div class="col-md-12">
-                                <h2 class="d-flex align-items-center mb-0">
-                                    {{res.Status}}
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                            <div class="progress-bar l-bg-yellow" role="progressbar" data-width="25%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"
-                                style="width: 75%; background: linear-gradient(to right, #a86008, #c18b39) !important;">
-                            </div>
-                        </div>
-                        {% elif res.Status == "Released" %}
-                        <div class="row align-items-center mb-2 d-flex">
-                            <div class="col-md-12">
-                                <h2 class="d-flex align-items-center mb-0">
-                                    Approved
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                            <div class="progress-bar l-bg-green" role="progressbar" data-width="75%" aria-valuenow="75"
-                                aria-valuemin="0" aria-valuemax="100"
-                                style="width: 100%; background: linear-gradient(to right, #a86008, #c18b39) !important;">
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card l-bg-green-dark statCard h-100">
-                    <div class="card-statistic-3 p-4">
-                        <div class="card-icon card-icon-large"><i class="fas fa-calendar-alt"></i></div>
-                        <div class="mb-4">
-                            <h5 class="card-title mb-0">Case Information</h5>
-                        </div>
-                        <div class="row align-items-center mb-2 d-flex">
-                            <div class="col-md-12">
-                                <h2 class="d-flex align-items-center mb-0">
-                                    {{res.Apply_on_behalf}}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card l-bg-orange-dark statCard h-100">
-                    <div class="card-statistic-3 p-4">
-                        <div class="card-icon card-icon-large"><i class="fas fa-calendar-times"></i></div>
-                        <div class="mb-4">
-                            <h5 class="card-title mb-0">Case Information</h5>
-                        </div>
-                        <div class="row align-items-center mb-2 d-flex">
-                            <div class="col-md-12">
-                                <h2 class="d-flex align-items-center mb-0">
-                                    {{res.Due_Date}}
                                 </h2>
                             </div>
 
@@ -161,319 +148,161 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        {% endif %}
+        <div class="row my-3" style="padding-bottom: 2rem;">
             <div class="col-md-12">
-                <form class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Case Information</label>
-                        <input type="text" class="form-control" placeholder="{{res.No_}}" readonly>
+                <div class="card" id="chat2">
+                    <div class="card-header d-flex justify-content-between align-items-center br-primary p-3">
+                        <h5 class="mb-0 text-white">Remarks to Specialist</h5>
+                        <button type="button" class="btn btn-primary btn-sm" id="RemTogge">Toggle Remarks <i
+                                class="las la-angle-double-down" id="applePic"></i></button>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Case Information</label>
-                        <input type="text" class="form-control" placeholder="{{res.Date}}" readonly>
+                    <div class="card-body" data-mdb-perfect-scrollbar="true" id="chat7"
+                        style="position: relative; height: auto;">
+
+                        <div class="justify-content-start mb-4">
+                            <div>
+                                <p class="p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;color: #333;">
+                                    {{res.Remarks_to_Specialist}}
+                                </p>
+                                <p class="small ms-3 mb-3 rounded-3 text-muted">00:13</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Case Information</label>
-                        <input type="text" class="form-control" placeholder="{{res.Account_No_}}" readonly>
+                </div>
+            </div>
+        </div>
+        {% if state == 1%}
+        <div class="row my-3" style="padding-bottom: 2rem;">
+            <div class="col-md-12">
+                <div class="card" id="chat2">
+                    <div class="card-header d-flex justify-content-between br-primary align-items-center p-3">
+                        <h5 class="mb-0 text-white">Specialist Recommendations </h5>
+                        <button type="button" class="btn btn-primary btn-sm" id="chatTogge">Toggle Response <i
+                                class="las la-angle-double-down" id="applePic"></i></button>
                     </div>
-                    <div class="col-12">
-                        <label for="inputAddress" class="form-label">Case Description</label>
-                        <textarea class="form-control" placeholder="{{res.Payment_Narration}}" rows="3"
-                            readonly></textarea>
+                    <div class="card-body" data-mdb-perfect-scrollbar="true" id="chat1"
+                        style="position: relative; height: auto;">
+
+                        <div class="justify-content-start mb-4">
+                            <div>
+                                <p class="p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;color: #333;">
+                                    {{res.Specialist_Recommendations}}
+                                </p>
+                                <p class="small ms-3 mb-3 rounded-3 text-muted">00:13</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer text-muted justify-content-start align-items-center p-3" id="chat2">
+                        <form action="{% url 'FnExpertSaveComments' res.Interact_Code %}" method="post" id="task-form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea class="form-control" rows="5" name="comments" placeholder="Type message"
+                                        style="overflow-y: scroll;display:inline-block"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <button class="btn sendBtn my-3" type="submit">
+                                            <i class="las la-paper-plane"></i>
+                                            <span class="text">
+                                                Send Response
+                                            </span>
+                                            <span class="loading-animate"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row pb-3" id="chat3">
+            <div class="col-md-12">
+                <form action="{% url 'FnUploadAttachedDocument' res.Interact_Code %}" class="dropzone dz"
+                    id="specialist-dropzone" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="fallback">
+                        <input name="file" class="form-control" name="attachment" type="file" multiple />
+                        <button type="submit" class="btn br-primary">Submit</button>
                     </div>
                 </form>
-                {% if state == 1 %}
-                <div class="myForm my-3">
-                    <form action="{% url 'Impres' res.No_ %}" method="POST" style="display: inline-block;">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <input type="hidden" hidden name="requisitionNo" value="{{res.No_}}">
-                        </div>
-                        <button class="btn btn-info" type="submit">Request For Approval</button>
-                    </form>
-                </div>
-                {% elif state == 2 %}
-                <div class="d-grid gap-2 my-3">
-                    <form action="{% url 'ImpresCancel' res.No_ %}" method="POST" class="myForm" id="approvalForm">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <input type="hidden" hidden name="requisitionNo" value="{{res.No_}}">
-                        </div>
-                        <button class="btn btn-info" type="submit">Cancel Request For Approval</button>
-                    </form>
-                </div>
-                {% endif %}
             </div>
-        </div>
 
-        <div class="row my-4">
+        </div>
+        <div class="row py-4">
             <div class="col-md-12">
-                <div class="card mb-4" id="d-card">
-                    <h4 class="mt-2 mx-2 text-dark">Case Attachments</h4>
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-md-2 mb-4">
-                                <div class="attachs rounded shadow-sm mx-auto text-center h-100">
-                                    <span class="small text-uppercase text-muted">File.pdf</span>
-                                    <ul class="social mb-0 list-inline mt-3">
-                                        <li class="list-inline-item">
-                                            <a href="../../static/docs/2.pdf" target="blank" class="social-link"><i
-                                                    class="fas fa-expand-alt"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="../../static/docs/2.pdf" class="social-link"
-                                                download="{{res.file_name}}">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-4">
-                                <div class="attachs rounded shadow-sm mx-auto text-center h-100">
-                                    <span class="small text-uppercase text-muted">File.pdf</span>
-                                    <ul class="social mb-0 list-inline mt-3">
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" target="blank" class="social-link"><i
-                                                    class="fas fa-expand-alt"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" class="social-link"
-                                                download="{{res.file_name}}">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-4">
-                                <div class="attachs rounded shadow-sm mx-auto text-center h-100">
-                                    <span class="small text-uppercase text-muted">File.pdf</span>
-                                    <ul class="social mb-0 list-inline mt-3">
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" target="blank" class="social-link"><i
-                                                    class="fas fa-expand-alt"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" class="social-link"
-                                                download="{{res.file_name}}">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-4">
-                                <div class="attachs rounded shadow-sm mx-auto text-center h-100">
-                                    <span class="small text-uppercase text-muted">File.pdf</span>
-                                    <ul class="social mb-0 list-inline mt-3">
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" target="blank" class="social-link"><i
-                                                    class="fas fa-expand-alt"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" class="social-link"
-                                                download="{{res.file_name}}">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-4">
-                                <div class="attachs rounded shadow-sm mx-auto text-center h-100">
-                                    <span class="small text-uppercase text-muted">File.pdf</span>
-                                    <ul class="social mb-0 list-inline mt-3">
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" target="blank" class="social-link"><i
-                                                    class="fas fa-expand-alt"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" class="social-link"
-                                                download="{{res.file_name}}">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-4">
-                                <div class="attachs rounded shadow-sm mx-auto text-center h-100">
-                                    <span class="small text-uppercase text-muted">File.pdf</span>
-                                    <ul class="social mb-0 list-inline mt-3">
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" target="blank" class="social-link"><i
-                                                    class="fas fa-expand-alt"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="{{res.filepath.url}}" class="social-link"
-                                                download="{{res.file_name}}">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                <form action="{% url 'FnExpertSubmitCase' res.Interact_Code %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary br-primary w-100">Submit Document</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="row my-3" style="padding-bottom: 2rem;">
+            <div class="col-md-12">
+                <div class="card" id="chat2">
+                    <div class="card-header d-flex justify-content-between br-primary align-items-center p-3">
+                        <h5 class="mb-0 text-white">Specialist Recommendations </h5>
+                        <button type="button" class="btn btn-primary btn-sm" id="chatTogge">Toggle Response <i
+                                class="las la-angle-double-down" id="applePic"></i></button>
+                    </div>
+                    <div class="card-body" data-mdb-perfect-scrollbar="true" id="chat1"
+                        style="position: relative; height: auto;">
+                        <div class="justify-content-start mb-4">
+                            <div>
+                                <p class="p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;color: #333;">
+                                    {{res.Specialist_Recommendations}}
+                                </p>
+                                <p class="small ms-3 mb-3 rounded-3 text-muted">00:13</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
-        <div class="row my-4">
-            <div class="col-md-12">
-                <div class="card mb-4" id="d-card">
-                    <h4 class="mt-2 mx-2 text-dark">Chat with Case Handler</h4>
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col msg-window-container">
-                                <div class="card" id="msgWindow">
-                                    <div class="card-header"><span class="card-title">Chat with Enock Abere </span>
-                                    </div>
-                                    <div class="card-body" id="msgs">
-                                        <div class="msg to">Hello! How can I assist you today?</div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="input-group" id="msgForm" data-sender="me">
-                                            <input class="form-control" type="text"
-                                                placeholder="Type message and hit [Enter] to send." />
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" type="button">Send</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% endif %}
     </div>
     </div>
     </div>
 </section>
-<!-- Modal -->
-<div class="modal fade" id="Attachment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Upload Attachment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="" method="post" class="myForm" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class=" mb-3">
-                        <label class="form-label">Attachments</label>
-                        <input class="form-control" name="attachment" type="file" multiple>
-                    </div>
 
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- End Report -->
 <script>
-    $(function () {
+    document.querySelector(".sendBtn").addEventListener("click", (evt) => {
+        evt.target.classList.add("loading");
 
-        // Define some elements from the DOM and utility methods.
-        let $form = $("#msgForm"),
-            $newMsg = $form.find("input"),
-            $sendBtn = $form.find("button"),
-            $feed = $("#msgs"),
-            _wait = ms => new Promise((r, j) => setTimeout(r, ms)), // See [0]
-            _secs = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
-
-        // Define our send method.
-        var _send = data => {
-            // Send data to a new .msg
-            let $msg = $('<div class="msg"></div>'),
-                {
-                    sender,
-                    typing
-                } = data;
-            if (sender !== "me") {
-                $msg.addClass("to");
-            } else {
-                $msg.addClass("from");
-            }
-            $msg.text(data.msg);
-            if (typing) $msg.addClass("typing");
-            $msg.appendTo($feed);
-            // If sending was successful, clear the text field.
-            $newMsg.val("");
-            // And simulate a reply from our agent.
-            if (sender === "me") setTimeout(_agentReply, 1000);
-            if (typing) return $msg; // ref to new DOM .msg
-        };
-
-
-
-        var _agentReply = () => {
-            // After a few seconds, the agent starts to type a message.
-            let waitAfew = _wait(_secs(3000, 5000)),
-                showAgentTyping = async () => {
-                    console.log("Handler is typing...");
-                    // Let the user know the agent is typing
-                    let $agentMsg = _send({
-                        msg: "Handler is typing...",
-                        typing: true,
-                        sender: false
-                    });
-                    // and in a few seconds show the typed message.
-                    waitAfew.then(() => {
-                        // @TODO: Simulate actual typing by removing the typing message when the agent isn't typing, and before the agent sends the typed message. Also allow typing to continue a number of times with breaks in between.
-                        $agentMsg.text("Welcome to KMPDC");
-                        $agentMsg.removeClass("typing");
-                    });
-
-                };
-            waitAfew.then(showAgentTyping());
-        };
-
-        // Define event handlers: Hitting Enter or Send should send the form.
-        $newMsg.on("keypress", function (e) {
-            // @TODO: Allow [mod] + [enter] to expand field & insert a <BR>
-            if (e.which === 13) {
-                // Stop the prop
-                e.stopPropagation();
-                e.preventDefault();
-                // Wrap the msg and send!
-                let theEnvelope = {
-                    msg: $newMsg.val(),
-                    sender: "me"
-                };
-
-                return _send(theEnvelope);
-            } else {
-                // goggles
-            }
-        });
-        $sendBtn.on("click", function (e) {
-            // Stop the prop
-            e.stopPropagation();
-            e.preventDefault();
-            // Wrap the msg and send!
-            let theEnvelope = {
-                msg: $newMsg.val(),
-                sender: "me"
-            };
-
-            return _send(theEnvelope);
-        });
+        setTimeout(() => {
+            evt.target.classList.remove("loading");
+        }, 3000);
     });
+    $(document).ready(function () {
+        $("#chatTogge").click(function () {
+            $("#chat1").toggle(1000);
+        });
+        $("#RemTogge").click(function () {
+            $("#chat7").toggle(1000);
+        });
+    })
+    Dropzone.autoDiscover = false;
+    const myDropzone = new Dropzone('#specialist-dropzone', {
+        url: '{% url "FnUploadAttachedDocument" res.Interact_Code %}',
+        method: "post",
+        paramName: "attachment",
+        maxFiles: 10,
+        clickable: true,
+        dictDefaultMessage: "Click or Drag and Drop files here to upload",
+        dictFallbackMessage: "Your browser does not support drag and drop file uploads.",
+        dictFallbackText: "Please use the fallback form below to upload your files.",
+        dictResponseError: "Server responded with {{statusCode}} code.",
+        dictCancelUpload: "Cancel upload",
+        dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+        dictRemoveFile: "Remove",
+        dictRemoveFileConfirmation: null,
+        dictMaxFilesExceeded: "You can only upload {{maxFiles}} files.",
+    })
 </script>
-
 {% endblock %}

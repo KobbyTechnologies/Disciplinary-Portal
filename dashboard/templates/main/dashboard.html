@@ -10,20 +10,35 @@
             <div class="col-12">
                 <span class="d-flex align-items-center purchase-popup">
                     <img src="../../../static/img/logo/fav.png" width="70px" class="img-fluid" alt="" srcset="">
+                    <h2 class="text-dark font-weight-bold ml-3"> {{types}} dashboard </h2>
+                    <button class="btn btn-success align-items-center p-3"
+                        style="margin-left: auto;margin-right:0;outline: none;border: none;">{{today}}</button>
                 </span>
+
             </div>
         </div>
-        <div class="d-xl-flex justify-content-between align-items-start">
-            <h2 class="text-dark font-weight-bold mb-2"> {{types}} dashboard </h2>
-            <div class="d-sm-flex justify-content-xl-between align-items-center mb-2">
-                <div class="dropdown ml-0 ml-md-4 mt-2 mt-lg-0">
-                    <button class="btn bg-white dropdown-toggle p-3 d-flex align-items-center" type="button"
-                        id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
-                            class="mdi mdi-calendar mr-1"></i>{{today}}
-                    </button>
-                </div>
+        <!--alert -->
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-success d-flex align-items-center alert-dismissible alert-success" role="alert">
+            <i class="las la-check-double" style="color: white;font-size: 2rem"></i>
+            <div class="a-icon mx-2">
+                {{message}}
             </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger d-flex align-items-center alert-dismissible alert-warn" role="alert">
+            <i class="las la-exclamation-triangle" style="color: white;font-size: 2rem"></i>
+            <div class="a-icon mx-2">
+                {{message}}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
         {% if types == "Advocate" %}
         <div class="row my-2">
             <div class="col-md-12">
@@ -111,21 +126,25 @@
                     <div class="m-4">
                         <ul class="nav nav-tabs" id="myTab">
                             <li class="nav-item">
-                                <a href="#home" class="nav-link active" data-bs-toggle="tab">Open Cases
+                                <a href="#home" class="nav-link active" data-bs-toggle="tab">Case Pending Acceptance
                                     ({{count}})</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#profile" class="nav-link" data-bs-toggle="tab">Case Pending Acceptance
-                                    ({{counter}})</a>
+                                <a href="#profile" class="nav-link" data-bs-toggle="tab">Open Cases
+                                    ({{counterLogged}})</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#reject" class="nav-link" data-bs-toggle="tab">Closed Cases
-                                    ({{counter}})</a>
+                                <a href="#closed" class="nav-link" data-bs-toggle="tab">Closed Cases
+                                    ({{counterClosed}})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#reject" class="nav-link" data-bs-toggle="tab">Rejected Cases
+                                    ({{counterReject}})</a>
                             </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="home">
-                                <h4 class="mt-2 text-dark">Open Cases</h4>
+                                <h4 class="mt-2 text-dark">Cases Pending Acceptance</h4>
                                 <div class="card-body">
                                     <table id="example"
                                         class="display table table-striped table-bordered dt-responsive table-responsive-lg"
@@ -133,52 +152,34 @@
                                         <thead>
                                             <tr id="tops">
                                                 <th id="long">Case ID</th>
-                                                <th>Description</th>
+                                                <th>Client Type</th>
+                                                <th>Specialty Description</th>
+                                                <th>Interaction Channel</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for res in case %}
                                             <tr>
-                                                <td>C0001</td>
-                                                <td id="rap">Please note the difference between the outcome of both the
-                                                    properties. </td>
+                                                <td>{{res.Case_No_}}</td>
+                                                <td>{{res.Client_Type}}</td>
+                                                <td id="rap">{{res.Speciality_Description}}</td>
+                                                <td>{{res.Interaction_Channel}}</td>
                                                 <td>
-                                                    <a href="{% url 'caseDetails' %}"
-                                                        class="btn btn-success actionBtn btnTrue" type="button"
-                                                        data-toggle="tooltip" data-placement="top" title="View">View <i
-                                                            class="fa fa-table"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="profile">
-                                <h4 class="mt-2">Cases Pending Acceptance </h4>
-                                <div class="card-body">
-                                    <table id="example"
-                                        class="display table table-striped table-bordered dt-responsive table-responsive-lg"
-                                        style="width:100%">
-                                        <thead>
-                                            <tr id="tops">
-                                                <th id="long">Case ID</th>
-                                                <th>Description</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>C0001</td>
-                                                <td id="rap">Please note the difference between the outcome of both the
-                                                    properties. </td>
-                                                <td>
-                                                    <a href="" class="btn btn-success btnTrue actionBtn" type="button"
-                                                        data-toggle="tooltip" data-placement="top" title="Accept">
-                                                        Accept
-                                                        <i class="fa fa-table"></i>
-                                                    </a>
-                                                    <a href="" class="btn btn-danger actionBtn" type="button"
+                                                    <form action="{% url 'CaseAcceptance' %}" method="post"
+                                                        style="display: inline-block;">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="interactCode"
+                                                            value="{{res.Interact_Code}}">
+                                                        <input type="hidden" name="myResponse" value="accept">
+                                                        <button class="btn btn-success btnTrue actionBtn" type="submit"
+                                                            data-toggle="tooltip" data-placement="top" title="Accept">
+                                                            Accept
+                                                            <i class="fa fa-table"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
+                                                        class="btn btn-danger actionBtn" type="button"
                                                         data-toggle="tooltip" data-placement="top" title="Reject"
                                                         data-bs-toggle="modal" data-bs-target="#editLeave">
                                                         Reject
@@ -188,14 +189,56 @@
                                                         data-toggle="tooltip" data-placement="top" title="View"> View <i
                                                             class="fa fa-table"></i>
                                                     </a>
+                                                    <div class="modal fade" id="editLeave" data-bs-backdrop="static"
+                                                        data-bs-keyboard="false" tabindex="-1"
+                                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                        <div
+                                                            class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="staticBackdropLabel">
+                                                                        Reject Case {{res.Interact_Code}}
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{% url 'CaseAcceptance' %}"
+                                                                        method="post">
+                                                                        {% csrf_token %}
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <input type="hidden" name="interactCode"
+                                                                                    value="{{res.Interact_Code}}">
+                                                                                <input type="hidden" name="myResponse"
+                                                                                    value="reject">
+                                                                                <label
+                                                                                    class="form-label">Comment</label>
+                                                                                <textarea class="form-control"
+                                                                                    name="comments" rows="3"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        data-bs-dismiss="modal">Discard</button>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Submit</button>
+                                                                </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="reject">
-                                <h4 class="mt-2">Closed Cases</h4>
+                            <div class="tab-pane fade" id="profile">
+                                <h4 class="mt-2 text-dark">Open Cases</h4>
                                 <div class="card-body">
                                     <table id="example"
                                         class="display table table-striped table-bordered dt-responsive table-responsive-lg"
@@ -203,22 +246,157 @@
                                         <thead>
                                             <tr id="tops">
                                                 <th id="long">Case ID</th>
+                                                <th>Client Type</th>
                                                 <th>Description</th>
+                                                <th>Interaction Channel</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for res in logged %}
                                             <tr>
-                                                <td>C0001</td>
-                                                <td id="rap">Please note the difference between the outcome of both the
-                                                    properties. </td>
+                                                <td>{{res.Case_No_}}</td>
+                                                <td>{{res.Client_Type}}</td>
+                                                <td id="rap">{{res.Speciality_Description}}</td>
+                                                <td>{{res.Interaction_Channel}}</td>
                                                 <td>
-                                                    <a href="" class="btn btn-success btn-icon-text" type="button"
-                                                        data-toggle="tooltip" data-placement="top" title="View"><i
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
+                                                        class="btn btn-success actionBtn btnTrue" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View">View <i
+                                                            class="fa fa-table"></i>
+                                                    </a>
+                                                    <a href="" class="btn btn-danger actionBtn" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="Reject"
+                                                        data-bs-toggle="modal" data-bs-target="#editLeave2">
+                                                        Reject
+                                                        <i class="fa fa-table"></i>
+                                                    </a>
+                                                    <div class="modal fade" id="editLeave2" data-bs-backdrop="static"
+                                                        data-bs-keyboard="false" tabindex="-1"
+                                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                        <div
+                                                            class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="staticBackdropLabel">
+                                                                        Reject Case {{res.Interact_Code}}
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{% url 'CaseAcceptance' %}"
+                                                                        method="post">
+                                                                        {% csrf_token %}
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <input type="hidden" name="interactCode"
+                                                                                    value="{{res.Interact_Code}}">
+                                                                                <input type="hidden" name="myResponse"
+                                                                                    value="reject">
+                                                                                <label
+                                                                                    class="form-label">Comment</label>
+                                                                                <textarea class="form-control"
+                                                                                    name="comments" rows="3"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        data-bs-dismiss="modal">Discard</button>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Submit</button>
+                                                                </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="closed">
+                                <h4 class="mt-2 text-dark">Closed Cases</h4>
+                                <div class="card-body">
+                                    <table id="example"
+                                        class="display table table-striped table-bordered dt-responsive table-responsive-lg"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr id="tops">
+                                                <th id="long">Case ID</th>
+                                                <th>Client Type</th>
+                                                <th>Description</th>
+                                                <th>Interaction Channel</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for res in closed %}
+                                            <tr>
+                                                <td>{{res.Case_No_}}</td>
+                                                <td>{{res.Client_Type}}</td>
+                                                <td id="rap">{{res.Speciality_Description}}</td>
+                                                <td>{{res.Interaction_Channel}}</td>
+                                                <td>
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
+                                                        class="btn btn-success actionBtn btnTrue" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View">View <i
                                                             class="fa fa-table"></i>
                                                     </a>
                                                 </td>
                                             </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="reject">
+                                <h4 class="mt-2 text-dark">Rejected Cases</h4>
+                                <div class="card-body">
+                                    <table id="example"
+                                        class="display table table-striped table-bordered dt-responsive table-responsive-lg"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr id="tops">
+                                                <th id="long">Case ID</th>
+                                                <th>Client Type</th>
+                                                <th>Description</th>
+                                                <th>Interaction Channel</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for res in reject %}
+                                            <tr>
+                                                <td>{{res.Case_No_}}</td>
+                                                <td>{{res.Client_Type}}</td>
+                                                <td id="rap">{{res.Speciality_Description}}</td>
+                                                <td>{{res.Interaction_Channel}}</td>
+                                                <td>
+                                                    <form action="{% url 'CaseAcceptance' %}" method="post"
+                                                        style="display: inline-block;">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="interactCode"
+                                                            value="{{res.Interact_Code}}">
+                                                        <input type="hidden" name="myResponse" value="accept">
+                                                        <button class="btn btn-success btnTrue actionBtn" type="submit"
+                                                            data-toggle="tooltip" data-placement="top" title="Accept">
+                                                            Accept
+                                                            <i class="fa fa-table"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
+                                                        class="btn btn-success actionBtn btnTrue" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View">View <i
+                                                            class="fa fa-table"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -232,36 +410,6 @@
     </div>
     </div>
 </section>
-<div class="modal fade" id="editLeave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                    Reject Case Acceptance
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="form-label">Comment</label>
-                            <textarea class="form-control" rows="3"></textarea>
-                        </div>
-                    </div>
 
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 </div>
 {% endblock %}

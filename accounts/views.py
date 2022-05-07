@@ -40,9 +40,9 @@ def login_request(request):
                     try:
                         Portal_Password = base64.urlsafe_b64decode(
                             applicant['Portal_Password'])
-                        if email == 'abereenock95@gmail.com':
-                            request.session['types'] = 'Specialist'
                         if email == 'emaeba@kobby.co.ke':
+                            request.session['types'] = 'Specialist'
+                        if email == 'abereenock95@gmail.com':
                             request.session['types'] = 'Advocate'
                         request.session['No_'] = applicant['No_']
                         request.session['E_Mail'] = applicant['E_Mail']
