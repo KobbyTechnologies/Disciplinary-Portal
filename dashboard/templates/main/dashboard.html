@@ -47,11 +47,11 @@
                         <ul class="nav nav-tabs" id="myTab">
                             <li class="nav-item">
                                 <a href="#home" class="nav-link active" data-bs-toggle="tab">Open Cases
-                                    ({{count}})</a>
+                                    ({{countLaw}})</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#reject" class="nav-link" data-bs-toggle="tab">Closed Cases
-                                    ({{counter}})</a>
+                                    ({{closedLawCounter}})</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -64,23 +64,28 @@
                                         <thead>
                                             <tr id="tops">
                                                 <th id="long">Case ID</th>
+                                                <th>Client Type</th>
                                                 <th>Description</th>
+                                                <th>Interaction Channel</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for res in law %}
                                             <tr>
-                                                <td>C0001</td>
-                                                <td id="rap">Please note the difference between the outcome of both the
-                                                    properties. </td>
+                                                <td>{{res.Case_No_}}</td>
+                                                <td>{{res.Client_Type}}</td>
+                                                <td id="rap">{{res.Speciality_Description}}</td>
+                                                <td>{{res.Interaction_Channel}}</td>
                                                 <td>
-                                                    <a href="{% url 'caseDetails' %}"
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
                                                         class="btn btn-success actionBtn btnTrue" type="button"
                                                         data-toggle="tooltip" data-placement="top" title="View">View <i
                                                             class="fa fa-table"></i>
                                                     </a>
                                                 </td>
                                             </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -94,22 +99,28 @@
                                         <thead>
                                             <tr id="tops">
                                                 <th id="long">Case ID</th>
+                                                <th>Client Type</th>
                                                 <th>Description</th>
+                                                <th>Interaction Channel</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for res in lawC %}
                                             <tr>
-                                                <td>C0001</td>
-                                                <td id="rap">Please note the difference between the outcome of both the
-                                                    properties. </td>
+                                                <td>{{res.Case_No_}}</td>
+                                                <td>{{res.Client_Type}}</td>
+                                                <td id="rap">{{res.Speciality_Description}}</td>
+                                                <td>{{res.Interaction_Channel}}</td>
                                                 <td>
-                                                    <a href="" class="btn btn-success btn-icon-text" type="button"
-                                                        data-toggle="tooltip" data-placement="top" title="View"><i
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
+                                                        class="btn btn-success actionBtn btnTrue" type="button"
+                                                        data-toggle="tooltip" data-placement="top" title="View">View <i
                                                             class="fa fa-table"></i>
                                                     </a>
                                                 </td>
                                             </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>

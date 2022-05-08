@@ -11,4 +11,6 @@ urlpatterns = [
          name="FnUploadAttachedDocument"),
     path('FnExpertSubmitCase/<str:pk>', views.FnExpertSubmitCase,
          name="FnExpertSubmitCase"),
+
+    path('lawDetails/<str:pk>', views.lawDetails, name="lawDetails"),
 ]

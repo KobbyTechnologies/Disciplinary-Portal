@@ -24,6 +24,8 @@ def dashboard(request):
         closedCases = []
         loggedCases = []
         rejectCases = []
+        lawOpen = []
+        lawClosed = []
         for case in responses['value']:
             if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance':
                 output_json = json.dumps(case)
@@ -37,10 +39,18 @@ def dashboard(request):
             if case['Status'] == "Specialist Rejected":
                 output_json = json.dumps(case)
                 rejectCases.append(json.loads(output_json))
+            if case['Appealed'] == True and case['Appeal_Resolved'] == False:
+                output_json = json.dumps(case)
+                lawOpen.append(json.loads(output_json))
+            if case['Appeal_Resolved'] == True:
+                output_json = json.dumps(case)
+                lawClosed.append(json.loads(output_json))
         count = len(cases)
         counterLogged = len(loggedCases)
         counterClosed = len(closedCases)
         counterReject = len(rejectCases)
+        OpenLaw = len(lawOpen)
+        closedLaw = len(lawClosed)
     except requests.exceptions.ConnectionError as e:
         print(e)
     types = request.session['types']
@@ -49,7 +59,9 @@ def dashboard(request):
            "count": count, "counterLogged": counterLogged,
            "case": cases, "logged": loggedCases, "types": types,
            "counterClosed": counterClosed, 'closed': closedCases,
-           'counterReject': counterReject, 'reject': rejectCases}
+           'counterReject': counterReject, 'reject': rejectCases,
+           "countLaw": OpenLaw, 'law': lawOpen, "closedLawCounter": closedLaw,
+           "lawC": lawClosed}
     return render(request, 'main/dashboard.html', ctx)
 
 
@@ -98,16 +110,23 @@ def caseDetails(request, pk):
             if case['Interact_Code'] == pk and case['Status'] == 'Logged':
                 res = case
                 state = 1
-            if case['Interact_Code'] == pk and case['Status'] == "Disciplinary Admin Intermediate":
+            if case['Interact_Code'] == pk and case['Status'] == "Disciplinary Admin Intermediate" and case['Appealed'] == False:
                 res = case
                 state = 2
-            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected":
+            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False:
                 res = case
                 state = 2
-            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected":
+            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False:
                 res = case
                 state = 2
-            if case['Interact_Code'] == pk and case['Status'] == 'Specialist Acceptance':
+            if case['Interact_Code'] == pk and case['Status'] == 'Specialist Acceptance' and case['Appealed'] == False:
+                res = case
+                state = 2
+            # Law Firm
+            if case['Interact_Code'] == pk and case['Appealed'] == True:
+                res = case
+                state = 1
+            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True:
                 res = case
                 state = 2
         for files in resFiles['value']:
@@ -116,10 +135,46 @@ def caseDetails(request, pk):
                 myFiles.append(json.loads(output_json))
     except requests.exceptions.ConnectionError as e:
         print(e)
+    print(state)
     types = request.session['types']
     ctx = {"today": todays_dates, "year": year,
-           "res": res, "file": myFiles, "state": state}
+           "res": res, "file": myFiles, "state": state, "types": types}
     return render(request, 'open.html', ctx)
+
+
+def lawDetails(request, pk):
+    todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
+    todays_date = date.today()
+    year = todays_date.year
+    session = requests.Session()
+    session.auth = config.AUTHS
+    Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
+    Access_Files = config.O_DATA.format("/QyDocumentAttachments")
+    res = ''
+    state = ''
+    myFiles = []
+    try:
+        responses = session.get(Access_Point, timeout=10).json()
+        resFiles = session.get(Access_Files, timeout=10).json()
+        for case in responses['value']:
+            # Law Firm
+            if case['Interact_Code'] == pk and case['Appealed'] == True:
+                res = case
+                state = 1
+            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True:
+                res = case
+                state = 2
+        for files in resFiles['value']:
+            if files['No_'] == pk and files['Table_ID'] == 52177806:
+                output_json = json.dumps(files)
+                myFiles.append(json.loads(output_json))
+    except requests.exceptions.ConnectionError as e:
+        print(e)
+    print(state)
+    types = request.session['types']
+    ctx = {"today": todays_dates, "year": year,
+           "res": res, "file": myFiles, "state": state, "types": types}
+    return render(request, 'law.html', ctx)
 
 
 def FnExpertSaveComments(request, pk):
