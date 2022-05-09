@@ -13,4 +13,8 @@ urlpatterns = [
          name="FnExpertSubmitCase"),
 
     path('lawDetails/<str:pk>', views.lawDetails, name="lawDetails"),
+    path('FnLawFirmSaveComments/<str:pk>',
+         views.FnLawFirmSaveComments, name="FnLawFirmSaveComments"),
+    path('FnLawFirmSubmitCase/<str:pk>',
+         views.FnLawFirmSubmitCase, name="FnLawFirmSubmitCase"),
 ]

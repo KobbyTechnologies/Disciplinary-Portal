@@ -142,41 +142,6 @@ def caseDetails(request, pk):
     return render(request, 'open.html', ctx)
 
 
-def lawDetails(request, pk):
-    todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
-    todays_date = date.today()
-    year = todays_date.year
-    session = requests.Session()
-    session.auth = config.AUTHS
-    Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
-    Access_Files = config.O_DATA.format("/QyDocumentAttachments")
-    res = ''
-    state = ''
-    myFiles = []
-    try:
-        responses = session.get(Access_Point, timeout=10).json()
-        resFiles = session.get(Access_Files, timeout=10).json()
-        for case in responses['value']:
-            # Law Firm
-            if case['Interact_Code'] == pk and case['Appealed'] == True:
-                res = case
-                state = 1
-            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True:
-                res = case
-                state = 2
-        for files in resFiles['value']:
-            if files['No_'] == pk and files['Table_ID'] == 52177806:
-                output_json = json.dumps(files)
-                myFiles.append(json.loads(output_json))
-    except requests.exceptions.ConnectionError as e:
-        print(e)
-    print(state)
-    types = request.session['types']
-    ctx = {"today": todays_dates, "year": year,
-           "res": res, "file": myFiles, "state": state, "types": types}
-    return render(request, 'law.html', ctx)
-
-
 def FnExpertSaveComments(request, pk):
     interactCode = pk
     expertNo = 'SPEC00001'
@@ -248,3 +213,82 @@ def FnExpertSubmitCase(request, pk):
             messages.error(request, "Not Sent")
             return redirect('caseDetails', pk=pk)
     return redirect('caseDetails', pk=pk)
+
+# Law Firm
+
+
+def lawDetails(request, pk):
+    todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
+    todays_date = date.today()
+    year = todays_date.year
+    session = requests.Session()
+    session.auth = config.AUTHS
+    Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
+    Access_Files = config.O_DATA.format("/QyDocumentAttachments")
+    res = ''
+    state = ''
+    myFiles = []
+    try:
+        responses = session.get(Access_Point, timeout=10).json()
+        resFiles = session.get(Access_Files, timeout=10).json()
+        for case in responses['value']:
+            # Law Firm
+            if case['Interact_Code'] == pk and case['Appealed'] == True:
+                res = case
+                state = 1
+            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True:
+                res = case
+                state = 2
+        for files in resFiles['value']:
+            if files['No_'] == pk and files['Table_ID'] == 52177806:
+                output_json = json.dumps(files)
+                myFiles.append(json.loads(output_json))
+    except requests.exceptions.ConnectionError as e:
+        print(e)
+    print(state)
+    types = request.session['types']
+    ctx = {"today": todays_dates, "year": year,
+           "res": res, "file": myFiles, "state": state, "types": types}
+    return render(request, 'law.html', ctx)
+
+
+def FnLawFirmSaveComments(request, pk):
+    interactCode = pk
+    lawFirmCode = 'LF0001'
+    comments = ''
+    if request.method == 'POST':
+        try:
+            comments = request.POST.get('comments')
+        except ValueError:
+            return redirect('lawDetails', pk=pk)
+        try:
+            response = config.CLIENT.service.FnLawFirmSaveComments(
+                interactCode, lawFirmCode, comments)
+            messages.success(request, "Successfully Sent")
+            print(response)
+            return redirect('lawDetails', pk=pk)
+        except Exception as e:
+            messages.error(request, e)
+            print(e)
+    return redirect('lawDetails', pk=pk)
+
+
+def FnLawFirmSubmitCase(request, pk):
+    interactCode = pk
+    lawFirmCode = 'LF0001'
+    response = ''
+    if request.method == "POST":
+        try:
+            response = config.CLIENT.service.FnLawFirmSubmitCase(
+                interactCode, lawFirmCode)
+            print(response)
+        except Exception as e:
+            messages.error(request, e)
+            print(e)
+        if response == True:
+            messages.success(request, "Submitted Successfully")
+            return redirect('lawDetails', pk=pk)
+        else:
+            messages.error(request, "Not Sent")
+            return redirect('lawDetails', pk=pk)
+    return redirect('lawDetails', pk=pk)
