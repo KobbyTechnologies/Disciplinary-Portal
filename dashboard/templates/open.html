@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
 <section class="dash2">
-    <div class="content-wrapper">
+    <div class="content-wrapper pb-3">
         <div class="d-xl-flex justify-content-between align-items-start">
             <h2 class="text-dark font-weight-bold mb-2"> Case {{res.Interact_Code}}
                 {% if state == 1 %}
@@ -56,7 +56,7 @@
         {% endif %}
         {% if state == 1%}
         <div class="row my-3">
-            <div class="col-md-5">
+            <div class="col-md-5 mb-2">
                 <div class="card l-bg-orange-dark  statCard h-100">
                     <div class="card-statistic-3 p-4">
                         <div class="card-icon card-icon-large"><i class="fas fa-briefcase"></i></div>
@@ -94,7 +94,7 @@
         </div>
         {% else %}
         <div class="row my-3">
-            <div class="col-md-4">
+            <div class="col-md-4 mb-2">
                 <div class="card l-bg-orange-dark  statCard h-100">
                     <div class="card-statistic-3 p-4">
                         <div class="card-icon card-icon-large"><i class="fas fa-briefcase"></i></div>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 mb-2">
                 <div class="card l-bg-cherry statCard h-100">
                     <div class="card-statistic-3 p-4">
                         <div class="card-icon card-icon-large"><i class="fas fa-folder-open"></i></div>
@@ -172,7 +172,6 @@
                 </div>
             </div>
         </div>
-        {% if state == 1%}
         <div class="row my-3" style="padding-bottom: 2rem;">
             <div class="col-md-12">
                 <div class="card" id="chat2">
@@ -194,6 +193,7 @@
                         </div>
 
                     </div>
+                    {% if state == 1%}
                     <div class="card-footer text-muted justify-content-start align-items-center p-3" id="chat2">
                         <form action="{% url 'FnExpertSaveComments' res.Interact_Code %}" method="post" id="task-form">
                             {% csrf_token %}
@@ -216,10 +216,12 @@
                             </div>
                         </form>
                     </div>
+                    {% endif %}
                 </div>
 
             </div>
         </div>
+        {% if state == 1%}
         <div class="row pb-3" id="chat3">
             <div class="col-md-12">
                 <form action="{% url 'FnUploadAttachedDocument' res.Interact_Code %}" class="dropzone dz"
@@ -233,6 +235,7 @@
             </div>
 
         </div>
+        <!-- Submit Btn -->
         <div class="row py-4">
             <div class="col-md-12">
                 <form action="{% url 'FnExpertSubmitCase' res.Interact_Code %}" method="post">
@@ -242,48 +245,25 @@
             </div>
         </div>
         {% else %}
-        <div class="row my-3" style="padding-bottom: 2rem;">
-            <div class="col-md-12">
-                <div class="card" id="chat2">
-                    <div class="card-header d-flex justify-content-between br-primary align-items-center p-3">
-                        <h5 class="mb-0 text-white">Specialist Recommendations </h5>
-                        <button type="button" class="btn btn-primary btn-sm" id="chatTogge">Toggle Response <i
-                                class="las la-angle-double-down" id="applePic"></i></button>
-                    </div>
-                    <div class="card-body" data-mdb-perfect-scrollbar="true" id="chat1"
-                        style="position: relative; height: auto;">
-                        <div class="justify-content-start mb-4">
-                            <div>
-                                <p class="p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;color: #333;">
-                                    {{res.Specialist_Recommendations}}
-                                </p>
-                                <p class="small ms-3 mb-3 rounded-3 text-muted">00:13</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
         {% endif %}
     </div>
 </section>
 
 <script>
-    document.querySelector(".sendBtn").addEventListener("click", (evt) => {
-        evt.target.classList.add("loading");
-
-        setTimeout(() => {
-            evt.target.classList.remove("loading");
-        }, 3000);
-    });
     $(document).ready(function () {
-        $("#chatTogge").click(function () {
-            $("#chat1").toggle(1000);
-        });
         $("#RemTogge").click(function () {
             $("#chat7").toggle(1000);
         });
+        $("#chatTogge").click(function () {
+            $("#chat1").toggle(1000);
+        });
+
+        $(".sendBtn").click(function () {
+            $(this).addClass("loading").delay(3000).queue(function () {
+                $(this).removeClass("loading").dequeue();
+            });
+        });
+
     })
     Dropzone.autoDiscover = false;
     const myDropzone = new Dropzone('#specialist-dropzone', {

@@ -1,4 +1,8 @@
 .env
 venv/
 tests.py
+data/RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+
 data/

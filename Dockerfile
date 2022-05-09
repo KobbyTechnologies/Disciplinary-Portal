@@ -17,6 +17,4 @@ COPY . KMPDC
 
 WORKDIR /KMPDC
 
-RUN chmod +x docker-entrypoint.sh
-
-ENTRYPOINT [ "./docker-entrypoint.sh" ]
+CMD [ "python", "manage.py", "runserver" ]
