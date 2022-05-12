@@ -59,6 +59,8 @@ DATABASES['default'].update(db_from_env)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
+DEBUG=True
+
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
@@ -74,8 +76,6 @@ INSTALLED_APPS = [
     'dashboard',
     'bootstrap5',
     'accounts',
-    'ckeditor',
-
 ]
 
 MIDDLEWARE = [
