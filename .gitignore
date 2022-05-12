@@ -1,5 +1,6 @@
 .env
 venv/
+virtual/
 tests.py
 data/RUN chmod +x docker-entrypoint.sh
 
