@@ -27,22 +27,22 @@ def dashboard(request):
         lawOpen = []
         lawClosed = []
         for case in responses['value']:
-            if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance':
+            if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance' and case['Specialist_No_'] == request.session['expertNo']:
                 output_json = json.dumps(case)
                 cases.append(json.loads(output_json))
-            if case['Stage'] == 'Specialist' and case['Status'] == 'Logged':
+            if case['Stage'] == 'Specialist' and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
                 output_json = json.dumps(case)
                 loggedCases.append(json.loads(output_json))
-            if case['Status'] == "Disciplinary Admin Intermediate":
+            if case['Status'] == "Disciplinary Admin Intermediate" and case['Specialist_No_'] == request.session['expertNo']:
                 output_json = json.dumps(case)
                 closedCases.append(json.loads(output_json))
-            if case['Status'] == "Specialist Rejected":
+            if case['Status'] == "Specialist Rejected" and case['Specialist_No_'] == request.session['expertNo']:
                 output_json = json.dumps(case)
                 rejectCases.append(json.loads(output_json))
-            if case['Appealed'] == True and case['Appeal_Resolved'] == False:
+            if case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 output_json = json.dumps(case)
                 lawOpen.append(json.loads(output_json))
-            if case['Appeal_Resolved'] == True:
+            if case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 output_json = json.dumps(case)
                 lawClosed.append(json.loads(output_json))
         count = len(cases)
@@ -67,7 +67,7 @@ def dashboard(request):
 
 def FnExpertCaseAcceptance(request):
     interactCode = ''
-    expertNo = 'SPEC00001'
+    expertNo = request.session['expertNo']
     myResponse = ''
     comments = ''
     if request.method == 'POST':
@@ -107,26 +107,26 @@ def caseDetails(request, pk):
         responses = session.get(Access_Point, timeout=10).json()
         resFiles = session.get(Access_Files, timeout=10).json()
         for case in responses['value']:
-            if case['Interact_Code'] == pk and case['Status'] == 'Logged':
+            if case['Interact_Code'] == pk and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
                 res = case
                 state = 1
-            if case['Interact_Code'] == pk and case['Status'] == "Disciplinary Admin Intermediate" and case['Appealed'] == False:
+            if case['Interact_Code'] == pk and case['Status'] == "Disciplinary Admin Intermediate" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
                 res = case
                 state = 2
-            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False:
+            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
                 res = case
                 state = 2
-            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False:
+            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
                 res = case
                 state = 2
-            if case['Interact_Code'] == pk and case['Status'] == 'Specialist Acceptance' and case['Appealed'] == False:
+            if case['Interact_Code'] == pk and case['Status'] == 'Specialist Acceptance' and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
                 res = case
                 state = 2
             # Law Firm
-            if case['Interact_Code'] == pk and case['Appealed'] == True:
+            if case['Interact_Code'] == pk and case['Appealed'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 res = case
                 state = 1
-            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True:
+            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 res = case
                 state = 2
         for files in resFiles['value']:
@@ -144,7 +144,7 @@ def caseDetails(request, pk):
 
 def FnExpertSaveComments(request, pk):
     interactCode = pk
-    expertNo = 'SPEC00001'
+    expertNo = request.session['expertNo']
     comments = ''
     if request.method == 'POST':
         try:
@@ -197,7 +197,7 @@ def FnUploadAttachedDocument(request, pk):
 
 def FnExpertSubmitCase(request, pk):
     interactCode = pk
-    expertNo = 'SPEC00001'
+    expertNo = request.session['expertNo']
     if request.method == "POST":
         try:
             response = config.CLIENT.service.FnExpertSubmitCase(
@@ -234,10 +234,10 @@ def lawDetails(request, pk):
         resFiles = session.get(Access_Files, timeout=10).json()
         for case in responses['value']:
             # Law Firm
-            if case['Interact_Code'] == pk and case['Appealed'] == True:
+            if case['Interact_Code'] == pk and case['Appealed'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 res = case
                 state = 1
-            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True:
+            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 res = case
                 state = 2
         for files in resFiles['value']:
@@ -255,7 +255,7 @@ def lawDetails(request, pk):
 
 def FnLawFirmSaveComments(request, pk):
     interactCode = pk
-    lawFirmCode = 'LF0001'
+    lawFirmCode = request.session['LawFirmNo']
     comments = ''
     if request.method == 'POST':
         try:
@@ -276,7 +276,7 @@ def FnLawFirmSaveComments(request, pk):
 
 def FnLawFirmSubmitCase(request, pk):
     interactCode = pk
-    lawFirmCode = 'LF0001'
+    lawFirmCode = request.session['LawFirmNo']
     response = ''
     if request.method == "POST":
         try:
