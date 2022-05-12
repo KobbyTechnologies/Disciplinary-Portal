@@ -297,3 +297,8 @@ label {
     color: var(--red-color);
     text-decoration: none;
 }
+.activate{
+    background: #fff !important;
+    height: 100vh;
+    width: 100%;
+}

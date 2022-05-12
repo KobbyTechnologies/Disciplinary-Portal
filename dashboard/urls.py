@@ -17,4 +17,5 @@ urlpatterns = [
          views.FnLawFirmSaveComments, name="FnLawFirmSaveComments"),
     path('FnLawFirmSubmitCase/<str:pk>',
          views.FnLawFirmSubmitCase, name="FnLawFirmSubmitCase"),
+
 ]

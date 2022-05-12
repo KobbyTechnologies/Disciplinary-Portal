@@ -168,7 +168,7 @@ def FnUploadAttachedDocument(request, pk):
     response = ""
     fileName = ""
     attachment = ""
-    tableID = 521777806
+    tableID = 52177806
 
     if request.method == "POST":
         try:
@@ -213,6 +213,7 @@ def FnExpertSubmitCase(request, pk):
             messages.error(request, "Not Sent")
             return redirect('caseDetails', pk=pk)
     return redirect('caseDetails', pk=pk)
+
 
 # Law Firm
 
