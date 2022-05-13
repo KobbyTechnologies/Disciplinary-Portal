@@ -1,4 +1,5 @@
 import base64
+from logging import exception
 import threading
 from django.http import response
 from django.shortcuts import redirect, render, HttpResponse
@@ -153,10 +154,10 @@ def FnLawFirmResetPassword(request):
                     request, 'We sent you an email to verify your account')
                 request.session['law_email'] = email
                 return redirect('lawLogin')
-        except requests.exceptions.ConnectionError as e:
+        except:
             messages.error(
-                request, e)
-            print(e)
+                request, "Law Firm Email Incorrect")
+            return redirect('lawLogin')
     return redirect('lawLogin')
 
 
@@ -209,7 +210,6 @@ def FnExpertResetPassword(request):
     SecretCode = ''.join(secrets.choice(alphabet) for i in range(5))
     session = requests.Session()
     session.auth = config.AUTHS
-
     email = ""
     resetCode = SecretCode
     if request.method == 'POST':
@@ -219,19 +219,16 @@ def FnExpertResetPassword(request):
             print("Invalid credentials, try again")
             return redirect('login')
         try:
-            response = config.CLIENT.service.FnExpertResetPassword(
-                email, resetCode)
+            response = config.CLIENT.service.FnExpertResetPassword(email, resetCode)
             print(response)
             if response == True:
                 send_reset_email(email, resetCode, request)
-                messages.success(
-                    request, 'We sent you an email to verify your account')
+                messages.success(request, 'We sent you an email to verify your account')
                 request.session['activation_email'] = email
                 return redirect('login')
-        except requests.exceptions.ConnectionError as e:
-            messages.error(
-                request, e)
-            print(e)
+        except:
+            messages.error(request, "Email incorrect")
+            return redirect('login')
     return redirect('login')
 # function to change Expert Password
 
