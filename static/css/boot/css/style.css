@@ -16192,18 +16192,6 @@ dl li {
   overflow: hidden;
 }
 
-.lock-screen .backhground-bg {
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  left: -20px;
-  bottom: -20px;
-  background: url("../images/samples/lockscreen-bg.jpg") no-repeat center center;
-  background-size: cover;
-  overflow: hidden;
-  min-height: 100%;
-}
-
 /* Navbar */
 .navbar {
   font-family: "nunito-medium", sans-serif;
