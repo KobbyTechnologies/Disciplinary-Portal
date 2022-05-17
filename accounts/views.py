@@ -212,7 +212,7 @@ def FnExpertResetPassword(request):
                 'Secret': resetCode,
                 })
             emails=EmailMessage(subject=email_subject, body=email_body,
-                             from_email=config.EMAIL_HOST_USER, to=['maebaenock95@gmail.com'])
+                             from_email=config.EMAIL_HOST_USER, to=[email])
             EmailThreads(emails).start()
             messages.success(request, 'We sent you an email to verify your account')
             request.session['activation_email'] = email
