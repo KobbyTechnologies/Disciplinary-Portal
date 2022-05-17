@@ -22,30 +22,14 @@ import threading
 # Create your views here.
 
 
-class EmailThread(threading.Thread):
+class EmailThreads(threading.Thread):
 
-    def __init__(self, email):
-        self.email = email
+    def __init__(self, emails):
+        self.emails = emails
         threading.Thread.__init__(self)
 
     def run(self):
-        self.email.send()
-
-
-def send_reset_email(email, resetCode, request):
-    current_site = get_current_site(request)
-    email_subject = 'Activate your account'
-    email_body = render_to_string('activate.html', {
-        'domain': current_site,
-        'Secret': resetCode,
-    })
-
-    email = EmailMessage(subject=email_subject, body=email_body,
-                         from_email=config.EMAIL_HOST_USER,
-                         to=[email]
-                         )
-
-    EmailThread(email).start()
+        self.emails.send()
 
 
 class EmailThread(threading.Thread):
@@ -221,11 +205,18 @@ def FnExpertResetPassword(request):
         try:
             response = config.CLIENT.service.FnExpertResetPassword(email, resetCode)
             print(response)
-            if response == True:
-                send_reset_email(email, resetCode, request)
-                messages.success(request, 'We sent you an email to verify your account')
-                request.session['activation_email'] = email
-                return redirect('login')
+            current_site = get_current_site(request)
+            email_subject = 'Activate your account'
+            email_body = render_to_string('activate.html', {
+                'domain': current_site,
+                'Secret': resetCode,
+                })
+            emails=EmailMessage(subject=email_subject, body=email_body,
+                             from_email=config.DEFAULT_FROM_EMAIL, to=[email])
+            EmailThreads(emails).start()
+            messages.success(request, 'We sent you an email to verify your account')
+            request.session['activation_email'] = email
+            return redirect('login')
         except:
             messages.error(request, "Email incorrect")
             return redirect('login')
