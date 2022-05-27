@@ -40,13 +40,21 @@ def dashboard(request):
                 if case['Status'] == "Specialist Rejected" and case['Specialist_No_'] == request.session['expertNo']:
                     output_json = json.dumps(case)
                     rejectCases.append(json.loads(output_json))
-            elif request.session['LawFirmNo']:       
-                if case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                # Expert Details
+                expertName =request.session['expertName'] 
+                expertNo = request.session['expertNo']
+                expertEmail = request.session['expertEmail']
+            if request.session['LawFirmNo']:      
+                if case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                     output_json = json.dumps(case)
                     lawOpen.append(json.loads(output_json))
-                if case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                if case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                     output_json = json.dumps(case)
                     lawClosed.append(json.loads(output_json))
+                # Law firm Details
+                Code = request.session['LawFirmNo']
+                Name =request.session['Name'] 
+                Email =  request.session['Email']
         count = len(cases)
         counterLogged = len(loggedCases)
         counterClosed = len(closedCases)
@@ -55,7 +63,8 @@ def dashboard(request):
         closedLaw = len(lawClosed)
     except requests.exceptions.ConnectionError as e:
         print(e)
-    types = request.session['types']
+    types = request.session['types']  
+
     todays_date = datetime.datetime.now().strftime("%b. %d, %Y %A")
     ctx = {"today": todays_date, "year": year,
            "count": count, "counterLogged": counterLogged,
@@ -63,7 +72,9 @@ def dashboard(request):
            "counterClosed": counterClosed, 'closed': closedCases,
            'counterReject': counterReject, 'reject': rejectCases,
            "countLaw": OpenLaw, 'law': lawOpen, "closedLawCounter": closedLaw,
-           "lawC": lawClosed}
+           "lawC": lawClosed,
+           "Code":Code,"Name":Name,"Email":Email,
+           "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
     return render(request, 'main/dashboard.html', ctx)
 
 
@@ -138,9 +149,14 @@ def caseDetails(request, pk):
     except requests.exceptions.ConnectionError as e:
         print(e)
     print(state)
+    # Expert Details
+    expertName =request.session['expertName'] 
+    expertNo = request.session['expertNo']
+    expertEmail = request.session['expertEmail']
     types = request.session['types']
     ctx = {"today": todays_dates, "year": year,
-           "res": res, "file": myFiles, "state": state, "types": types}
+           "res": res, "file": myFiles, "state": state, "types": types,
+           "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
     return render(request, 'open.html', ctx)
 
 
@@ -236,10 +252,10 @@ def lawDetails(request, pk):
         resFiles = session.get(Access_Files, timeout=10).json()
         for case in responses['value']:
             # Law Firm
-            if case['Interact_Code'] == pk and case['Appealed'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+            if case['Interact_Code'] == pk and  case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 res = case
                 state = 1
-            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+            if case['Interact_Code'] == pk and case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
                 res = case
                 state = 2
         for files in resFiles['value']:
@@ -249,9 +265,14 @@ def lawDetails(request, pk):
     except requests.exceptions.ConnectionError as e:
         print(e)
     print(state)
+    # Law firm Details
+    Code = request.session['LawFirmNo']
+    Name =request.session['Name'] 
+    Email =  request.session['Email']
     types = request.session['types']
     ctx = {"today": todays_dates, "year": year,
-           "res": res, "file": myFiles, "state": state, "types": types}
+           "res": res, "file": myFiles, "state": state, "types": types,
+           "Code":Code,"Name":Name,"Email":Email,}
     return render(request, 'law.html', ctx)
 
 

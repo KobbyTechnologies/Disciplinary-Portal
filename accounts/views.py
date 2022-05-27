@@ -91,7 +91,9 @@ def lawLogin(request):
                         Portal_Password = base64.urlsafe_b64decode(
                             applicant['Portal_Password'])
                         request.session['LawFirmNo'] = applicant['Code']
-                        request.session['types'] = 'Advocate'
+                        request.session['types'] = 'Law Firm'
+                        request.session['Name'] = applicant['Name']
+                        request.session['Email'] = applicant['Email']
                     except Exception as e:
                         messages.error(request, e)
                         return redirect('lawLogin')
@@ -293,7 +295,9 @@ def expertLogin(request):
                             applicant['Portal_Password'])
                         request.session['expertNo'] = applicant['No_']
                         print(request.session['expertNo'])
-                        request.session['types'] = 'Specialist'
+                        request.session['types'] = 'Expert'
+                        request.session['expertName'] = applicant['First_Name'] + " " + applicant['Last_Name']
+                        request.session['expertEmail'] = applicant['Email']
                     except Exception as e:
                         messages.error(request, e)
                         return redirect('login')
@@ -314,3 +318,4 @@ def expertLogin(request):
                 request, "Invalid Credentials")
             return redirect('login')
     return redirect('login')
+ 

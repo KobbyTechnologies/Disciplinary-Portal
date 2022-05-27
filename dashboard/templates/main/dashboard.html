@@ -9,7 +9,7 @@
             <div class="col-12">
                 <span class="d-flex align-items-center purchase-popup">
                     <img src="../../../static/img/logo/fav.png" width="70px" class="img-fluid" alt="" srcset="">
-                    <h2 class="text-dark font-weight-bold ml-3"> {{types}} dashboard </h2>
+                    <h2 class="text-dark font-weight-bold ml-3"> {{types}} Dashboard </h2>
                     <button class="btn btn-success align-items-center p-3"
                         style="margin-left: auto;margin-right:0;outline: none;border: none;">{{today}}</button>
                 </span>
@@ -38,7 +38,7 @@
         {% endif %}
         {% endfor %}
         {% endif %}
-        {% if types == "Advocate" %}
+        {% if types == "Law Firm" %}
         <div class="row my-2">
             <div class="col-md-12">
                 <div class="card" id="d-card">
@@ -129,7 +129,7 @@
                 </div>
             </div>
         </div>
-        {% elif types == "Specialist" %}
+        {% elif types == "Expert" %}
         <div class="row my-2">
             <div class="col-md-12">
                 <div class="card" id="d-card">
@@ -144,7 +144,7 @@
                                     ({{counterLogged}})</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#closed" class="nav-link" data-bs-toggle="tab">Closed Cases
+                                <a href="#closed" class="nav-link" data-bs-toggle="tab">Submitted Cases
                                     ({{counterClosed}})</a>
                             </li>
                             <li class="nav-item">
@@ -195,7 +195,8 @@
                                                         Reject
                                                         <i class="fa fa-table"></i>
                                                     </a>
-                                                    <a href="" class="btn btn-success actionBtn btnHome" type="button"
+                                                    <a href="{% url 'caseDetails' res.Interact_Code %}"
+                                                        class="btn btn-success actionBtn btnHome" type="button"
                                                         data-toggle="tooltip" data-placement="top" title="View"> View <i
                                                             class="fa fa-table"></i>
                                                     </a>
