@@ -26,35 +26,47 @@ def dashboard(request):
         rejectCases = []
         lawOpen = []
         lawClosed = []
+        Code = ""
+        Name = ""
+        Email = ""
+        expertName = ""
+        expertNo = ""
+        expertEmail = ""
         for case in responses['value']:
-            if request.session['expertNo']:
-                if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance' and case['Specialist_No_'] == request.session['expertNo']:
-                    output_json = json.dumps(case)
-                    cases.append(json.loads(output_json))
-                if case['Stage'] == 'Specialist' and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
-                    output_json = json.dumps(case)
-                    loggedCases.append(json.loads(output_json))
-                if case['Status'] == "Disciplinary Admin Intermediate" and case['Specialist_No_'] == request.session['expertNo']:
-                    output_json = json.dumps(case)
-                    closedCases.append(json.loads(output_json))
-                if case['Status'] == "Specialist Rejected" and case['Specialist_No_'] == request.session['expertNo']:
-                    output_json = json.dumps(case)
-                    rejectCases.append(json.loads(output_json))
-                # Expert Details
-                expertName =request.session['expertName'] 
-                expertNo = request.session['expertNo']
-                expertEmail = request.session['expertEmail']
-            if request.session['LawFirmNo']:      
-                if case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                    output_json = json.dumps(case)
-                    lawOpen.append(json.loads(output_json))
-                if case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                    output_json = json.dumps(case)
-                    lawClosed.append(json.loads(output_json))
-                # Law firm Details
-                Code = request.session['LawFirmNo']
-                Name =request.session['Name'] 
-                Email =  request.session['Email']
+            if request.session['types'] == 'Expert':
+                try:
+                    if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance' and case['Specialist_No_'] == request.session['expertNo']:
+                        output_json = json.dumps(case)
+                        cases.append(json.loads(output_json))
+                    if case['Stage'] == 'Specialist' and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
+                        output_json = json.dumps(case)
+                        loggedCases.append(json.loads(output_json))
+                    if case['Status'] == "Disciplinary Admin Intermediate" and case['Specialist_No_'] == request.session['expertNo']:
+                        output_json = json.dumps(case)
+                        closedCases.append(json.loads(output_json))
+                    if case['Status'] == "Specialist Rejected" and case['Specialist_No_'] == request.session['expertNo']:
+                        output_json = json.dumps(case)
+                        rejectCases.append(json.loads(output_json))
+                    # Expert Details
+                    expertName =request.session['expertName'] 
+                    expertNo = request.session['expertNo']
+                    expertEmail = request.session['expertEmail']
+                except:
+                    print("Not working")
+            if request.session['types'] == 'Law Firm':      
+                try:
+                    if case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                        output_json = json.dumps(case)
+                        lawOpen.append(json.loads(output_json))
+                    if case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                        output_json = json.dumps(case)
+                        lawClosed.append(json.loads(output_json))
+                    # Law firm Details
+                    Code = request.session['LawFirmNo']
+                    Name =request.session['Name'] 
+                    Email =  request.session['Email']
+                except:
+                    print("Not working")
         count = len(cases)
         counterLogged = len(loggedCases)
         counterClosed = len(closedCases)
