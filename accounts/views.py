@@ -321,9 +321,8 @@ def expertLogin(request):
 
 def logout(request):
     try:
-        del request.session['LawFirmNo']
         del request.session['types']
-        del request.session['expertNo']
+        print(True)
     except KeyError:
-        pass
+        print(False)
     return redirect('login')

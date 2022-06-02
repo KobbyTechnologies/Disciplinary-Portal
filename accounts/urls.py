@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.login_request, name='login'),
     path('lawLogin', views.lawLogin, name='lawLogin'),
+    path('logout', views.logout, name='logout'),
     path('FnLawFirmResetPassword', views.FnLawFirmResetPassword,
          name='FnLawFirmResetPassword'),
     path('FnExpertChangePassword', views.FnExpertChangePassword,
@@ -13,4 +14,5 @@ urlpatterns = [
     path('expertLogin', views.expertLogin, name='expertLogin'),
     path('FnLawFirmChangePassword', views.FnLawFirmChangePassword,
          name='FnLawFirmChangePassword'),
+
 ]

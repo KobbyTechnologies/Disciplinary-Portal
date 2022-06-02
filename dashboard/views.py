@@ -8,86 +8,89 @@ import datetime
 from datetime import date
 import base64
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 
 def dashboard(request):
-    session = requests.Session()
-    session.auth = config.AUTHS
-    Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
-    todays_date = date.today()
-    year = todays_date.year
-
     try:
-        responses = session.get(Access_Point, timeout=10).json()
-        cases = []
-        closedCases = []
-        loggedCases = []
-        rejectCases = []
-        lawOpen = []
-        lawClosed = []
-        Code = ""
-        Name = ""
-        Email = ""
-        expertName = ""
-        expertNo = ""
-        expertEmail = ""
-        for case in responses['value']:
-            if request.session['types'] == 'Expert':
-                try:
-                    if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance' and case['Specialist_No_'] == request.session['expertNo']:
-                        output_json = json.dumps(case)
-                        cases.append(json.loads(output_json))
-                    if case['Stage'] == 'Specialist' and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
-                        output_json = json.dumps(case)
-                        loggedCases.append(json.loads(output_json))
-                    if case['Status'] == "Disciplinary Admin Intermediate" and case['Specialist_No_'] == request.session['expertNo']:
-                        output_json = json.dumps(case)
-                        closedCases.append(json.loads(output_json))
-                    if case['Status'] == "Specialist Rejected" and case['Specialist_No_'] == request.session['expertNo']:
-                        output_json = json.dumps(case)
-                        rejectCases.append(json.loads(output_json))
-                    # Expert Details
-                    expertName =request.session['expertName'] 
-                    expertNo = request.session['expertNo']
-                    expertEmail = request.session['expertEmail']
-                except:
-                    print("Not working")
-            if request.session['types'] == 'Law Firm':      
-                try:
-                    if case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                        output_json = json.dumps(case)
-                        lawOpen.append(json.loads(output_json))
-                    if case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                        output_json = json.dumps(case)
-                        lawClosed.append(json.loads(output_json))
-                    # Law firm Details
-                    Code = request.session['LawFirmNo']
-                    Name =request.session['Name'] 
-                    Email =  request.session['Email']
-                except:
-                    print("Not working")
-        count = len(cases)
-        counterLogged = len(loggedCases)
-        counterClosed = len(closedCases)
-        counterReject = len(rejectCases)
-        OpenLaw = len(lawOpen)
-        closedLaw = len(lawClosed)
-    except requests.exceptions.ConnectionError as e:
-        print(e)
-    types = request.session['types']  
+        session = requests.Session()
+        session.auth = config.AUTHS
+        Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
+        todays_date = date.today()
+        year = todays_date.year
 
-    todays_date = datetime.datetime.now().strftime("%b. %d, %Y %A")
-    ctx = {"today": todays_date, "year": year,
-           "count": count, "counterLogged": counterLogged,
-           "case": cases, "logged": loggedCases, "types": types,
-           "counterClosed": counterClosed, 'closed': closedCases,
-           'counterReject': counterReject, 'reject': rejectCases,
-           "countLaw": OpenLaw, 'law': lawOpen, "closedLawCounter": closedLaw,
-           "lawC": lawClosed,
-           "Code":Code,"Name":Name,"Email":Email,
-           "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
+        try:
+            responses = session.get(Access_Point, timeout=10).json()
+            cases = []
+            closedCases = []
+            loggedCases = []
+            rejectCases = []
+            lawOpen = []
+            lawClosed = []
+            Code = ""
+            Name = ""
+            Email = ""
+            expertName = ""
+            expertNo = ""
+            expertEmail = ""
+            for case in responses['value']:
+                if request.session['types'] == 'Expert':
+                    try:
+                        if case['Stage'] == 'Specialist' and case['Status'] == 'Specialist Acceptance' and case['Specialist_No_'] == request.session['expertNo']:
+                            output_json = json.dumps(case)
+                            cases.append(json.loads(output_json))
+                        if case['Stage'] == 'Specialist' and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
+                            output_json = json.dumps(case)
+                            loggedCases.append(json.loads(output_json))
+                        if case['Status'] == "Disciplinary Admin Intermediate" and case['Specialist_No_'] == request.session['expertNo']:
+                            output_json = json.dumps(case)
+                            closedCases.append(json.loads(output_json))
+                        if case['Status'] == "Specialist Rejected" and case['Specialist_No_'] == request.session['expertNo']:
+                            output_json = json.dumps(case)
+                            rejectCases.append(json.loads(output_json))
+                        # Expert Details
+                        expertName =request.session['expertName'] 
+                        expertNo = request.session['expertNo']
+                        expertEmail = request.session['expertEmail']
+                    except:
+                        print("Not working")
+                if request.session['types'] == 'Law Firm':      
+                    try:
+                        if case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                            output_json = json.dumps(case)
+                            lawOpen.append(json.loads(output_json))
+                        if case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                            output_json = json.dumps(case)
+                            lawClosed.append(json.loads(output_json))
+                        # Law firm Details
+                        Code = request.session['LawFirmNo']
+                        Name =request.session['Name'] 
+                        Email =  request.session['Email']
+                    except:
+                        print("Not working")
+            count = len(cases)
+            counterLogged = len(loggedCases)
+            counterClosed = len(closedCases)
+            counterReject = len(rejectCases)
+            OpenLaw = len(lawOpen)
+            closedLaw = len(lawClosed)
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+        types = request.session['types']  
+
+        todays_date = datetime.datetime.now().strftime("%b. %d, %Y %A")
+        ctx = {"today": todays_date, "year": year,
+            "count": count, "counterLogged": counterLogged,
+            "case": cases, "logged": loggedCases, "types": types,
+            "counterClosed": counterClosed, 'closed': closedCases,
+            'counterReject': counterReject, 'reject': rejectCases,
+            "countLaw": OpenLaw, 'law': lawOpen, "closedLawCounter": closedLaw,
+            "lawC": lawClosed,
+            "Code":Code,"Name":Name,"Email":Email,
+            "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
+    except KeyError:
+        return redirect('login')
     return render(request, 'main/dashboard.html', ctx)
 
 
