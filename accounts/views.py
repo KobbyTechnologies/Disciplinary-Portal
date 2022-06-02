@@ -318,4 +318,12 @@ def expertLogin(request):
                 request, "Invalid Credentials")
             return redirect('login')
     return redirect('login')
- 
+
+def logout(request):
+    try:
+        del request.session['LawFirmNo']
+        del request.session['types']
+        del request.session['expertNo']
+    except KeyError:
+        pass
+    return redirect('login')
