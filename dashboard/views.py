@@ -90,6 +90,7 @@ def dashboard(request):
             "Code":Code,"Name":Name,"Email":Email,
             "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
     except KeyError:
+        messages.error(request, "Session has expired, Login Again")
         return redirect('login')
     return render(request, 'main/dashboard.html', ctx)
 
@@ -122,57 +123,61 @@ def FnExpertCaseAcceptance(request):
 
 
 def caseDetails(request, pk):
-    todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
-    todays_date = date.today()
-    year = todays_date.year
-    session = requests.Session()
-    session.auth = config.AUTHS
-    Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
-    Access_Files = config.O_DATA.format("/QyDocumentAttachments")
-    res = ''
-    state = ''
-    myFiles = []
     try:
-        responses = session.get(Access_Point, timeout=10).json()
-        resFiles = session.get(Access_Files, timeout=10).json()
-        for case in responses['value']:
-            if case['Interact_Code'] == pk and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
-                res = case
-                state = 1
-            if case['Interact_Code'] == pk and case['Status'] == "Disciplinary Admin Intermediate" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
-                res = case
-                state = 2
-            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
-                res = case
-                state = 2
-            if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
-                res = case
-                state = 2
-            if case['Interact_Code'] == pk and case['Status'] == 'Specialist Acceptance' and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
-                res = case
-                state = 2
-            # Law Firm
-            if case['Interact_Code'] == pk and case['Appealed'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                res = case
-                state = 1
-            if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                res = case
-                state = 2
-        for files in resFiles['value']:
-            if files['No_'] == pk and files['Table_ID'] == 52177806:
-                output_json = json.dumps(files)
-                myFiles.append(json.loads(output_json))
-    except requests.exceptions.ConnectionError as e:
-        print(e)
-    print(state)
-    # Expert Details
-    expertName =request.session['expertName'] 
-    expertNo = request.session['expertNo']
-    expertEmail = request.session['expertEmail']
-    types = request.session['types']
-    ctx = {"today": todays_dates, "year": year,
-           "res": res, "file": myFiles, "state": state, "types": types,
-           "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
+        todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
+        todays_date = date.today()
+        year = todays_date.year
+        session = requests.Session()
+        session.auth = config.AUTHS
+        Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
+        Access_Files = config.O_DATA.format("/QyDocumentAttachments")
+        res = ''
+        state = ''
+        myFiles = []
+        try:
+            responses = session.get(Access_Point, timeout=10).json()
+            resFiles = session.get(Access_Files, timeout=10).json()
+            for case in responses['value']:
+                if case['Interact_Code'] == pk and case['Status'] == 'Logged' and case['Specialist_No_'] == request.session['expertNo']:
+                    res = case
+                    state = 1
+                if case['Interact_Code'] == pk and case['Status'] == "Disciplinary Admin Intermediate" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
+                    res = case
+                    state = 2
+                if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
+                    res = case
+                    state = 2
+                if case['Interact_Code'] == pk and case['Status'] == "Specialist Rejected" and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
+                    res = case
+                    state = 2
+                if case['Interact_Code'] == pk and case['Status'] == 'Specialist Acceptance' and case['Appealed'] == False and case['Specialist_No_'] == request.session['expertNo']:
+                    res = case
+                    state = 2
+                # Law Firm
+                if case['Interact_Code'] == pk and case['Appealed'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                    res = case
+                    state = 1
+                if case['Interact_Code'] == pk and case['Appeal_Resolved'] == True and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                    res = case
+                    state = 2
+            for files in resFiles['value']:
+                if files['No_'] == pk and files['Table_ID'] == 52177806:
+                    output_json = json.dumps(files)
+                    myFiles.append(json.loads(output_json))
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+        print(state)
+        # Expert Details
+        expertName =request.session['expertName'] 
+        expertNo = request.session['expertNo']
+        expertEmail = request.session['expertEmail']
+        types = request.session['types']
+        ctx = {"today": todays_dates, "year": year,
+            "res": res, "file": myFiles, "state": state, "types": types,
+            "expertName":expertName,"expertNo":expertNo,"expertEmail":expertEmail}
+    except KeyError:
+        messages.error(request, "Session has expired, Login Again")
+        return redirect('login')
     return render(request, 'open.html', ctx)
 
 
@@ -253,42 +258,46 @@ def FnExpertSubmitCase(request, pk):
 
 
 def lawDetails(request, pk):
-    todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
-    todays_date = date.today()
-    year = todays_date.year
-    session = requests.Session()
-    session.auth = config.AUTHS
-    Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
-    Access_Files = config.O_DATA.format("/QyDocumentAttachments")
-    res = ''
-    state = ''
-    myFiles = []
     try:
-        responses = session.get(Access_Point, timeout=10).json()
-        resFiles = session.get(Access_Files, timeout=10).json()
-        for case in responses['value']:
-            # Law Firm
-            if case['Interact_Code'] == pk and  case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                res = case
-                state = 1
-            if case['Interact_Code'] == pk and case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
-                res = case
-                state = 2
-        for files in resFiles['value']:
-            if files['No_'] == pk and files['Table_ID'] == 52177806:
-                output_json = json.dumps(files)
-                myFiles.append(json.loads(output_json))
-    except requests.exceptions.ConnectionError as e:
-        print(e)
-    print(state)
-    # Law firm Details
-    Code = request.session['LawFirmNo']
-    Name =request.session['Name'] 
-    Email =  request.session['Email']
-    types = request.session['types']
-    ctx = {"today": todays_dates, "year": year,
-           "res": res, "file": myFiles, "state": state, "types": types,
-           "Code":Code,"Name":Name,"Email":Email,}
+        todays_dates = datetime.datetime.now().strftime("%b. %d, %Y %A")
+        todays_date = date.today()
+        year = todays_date.year
+        session = requests.Session()
+        session.auth = config.AUTHS
+        Access_Point = config.O_DATA.format("/QyEthicsDisciplinaryCases")
+        Access_Files = config.O_DATA.format("/QyDocumentAttachments")
+        res = ''
+        state = ''
+        myFiles = []
+        try:
+            responses = session.get(Access_Point, timeout=10).json()
+            resFiles = session.get(Access_Files, timeout=10).json()
+            for case in responses['value']:
+                # Law Firm
+                if case['Interact_Code'] == pk and  case['Law_Firm_Submitted']==False and case['Law_Firm_Accepted']==True and case['Appealed'] == True and case['Appeal_Resolved'] == False and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                    res = case
+                    state = 1
+                if case['Interact_Code'] == pk and case['Law_Firm_Submitted']==True and case['Status'] == 'Disciplinary Admin Intermediate' and case['Law_Firm_Code'] == request.session['LawFirmNo']:
+                    res = case
+                    state = 2
+            for files in resFiles['value']:
+                if files['No_'] == pk and files['Table_ID'] == 52177806:
+                    output_json = json.dumps(files)
+                    myFiles.append(json.loads(output_json))
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+        print(state)
+        # Law firm Details
+        Code = request.session['LawFirmNo']
+        Name =request.session['Name'] 
+        Email =  request.session['Email']
+        types = request.session['types']
+        ctx = {"today": todays_dates, "year": year,
+            "res": res, "file": myFiles, "state": state, "types": types,
+            "Code":Code,"Name":Name,"Email":Email,}
+    except KeyError:
+        messages.error(request, "Session has expired, Login Again")
+        return redirect('login')
     return render(request, 'law.html', ctx)
 
 

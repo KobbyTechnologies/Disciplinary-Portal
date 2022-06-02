@@ -322,7 +322,7 @@ def expertLogin(request):
 def logout(request):
     try:
         del request.session['types']
-        print(True)
+        messages.success(request,'Logged out successfully')
     except KeyError:
         print(False)
     return redirect('login')
